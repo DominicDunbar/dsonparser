@@ -112,6 +112,10 @@ Inputs[3][1]=136235.92;
 
 DsonElement element2=new DsonElement(“JAVA”)
 
+Note: In adding an 1D Array of Object[rows] into a DsonArray type the 
+rows can be any size but just contain values that are of Java primitive data
+type.
+
 Object obj[]=new Object[7];
 obj[0]=”JavaScript”;
 obj[1]=”Python”;

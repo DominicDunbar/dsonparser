@@ -21,6 +21,7 @@ public class DsonTest
 		
 		DsonParser dson=new DsonParser(json_string);
 		
+		// (Recommended way of finding your data)
 		Object obj=dson.find("contact.cell.[0].work");
 
 		if(obj instanceof DsonElement)
@@ -29,7 +30,9 @@ public class DsonTest
 			System.out.println("Using the Find Method: "+ ele.getField()+":"+ele.getValue());
 		}
 		
-		//Alternative
+		// Alternative way of finding your data (Not Recommended)
+		// Requires that you follow the Dsonparser Structure and 
+		// following the nested structure of the Json String
 		DsonElement directpath=dson.getRoot().getObject().getDson(1).getObject().getDson(0).getArray().getDson(0).getObject().getElement(1);
 		System.out.println("Using the Direct Path approach: "+directpath.getField()+":"+directpath.getValue());
 		
@@ -41,7 +44,7 @@ public class DsonTest
 		DsonElement element=new DsonElement("id", "123456789");
 
 		/*
-		 * Note in appending a 2D array of objects the first column has to have the field name that is
+		 * Note in appending a 2D array of objects to a DsonObject the first column has to have the field name that is
 		 * of type string and the second column is your data of any Java primitive data type. When it is 
 		 * appended the fields will be associated with the value of the corresponding column.
 		 */
@@ -56,6 +59,11 @@ public class DsonTest
 		Inputs[3][1]=136235.92;
 		
 		DsonElement element2=new DsonElement("JAVA");
+		
+		/*
+		 * Note in appending a 1D array of objects to a DsonArray the objects are just your Java primitive data
+		 * there are no fields associated with the values.
+		 */
 		Object obj[]=new Object[7];
 		obj[0]="JavaScript";
 		obj[1]="Python";
@@ -65,14 +73,14 @@ public class DsonTest
 		obj[5]="CSS";
 		obj[6]="MongoDB";
 
-		array.appen(element2);
-		array.append(obj);
-		object.append(inputs);
-		object.append("languages", array);
-		root.append(element)
-		root.append("info", object);
+		array.append(element2); // append a DsonElement with just a value to a DsonArray
+		array.append(obj); // append Java 1D array of Objects to a DsonArray
+		object.append(inputs); // append Java 2D array to a DsonObject
+		object.append("languages", array); // append a DsonArray to a DsonObject with a field name
+		root.append(element) // append a DsonElement to the main root DsonObject
+		root.append("info", object); // append a nested DsonObject to main root DsonObject with a field name
 		DsonWriter writer=new DsonWriter();
-		String Json_String=writer.buildDsonString(root);
+		String Json_String=writer.buildDsonString(root); // DsonWriter converting a DsonObject into a Json String
 		System.out.println(Json_String);
 	}
 }

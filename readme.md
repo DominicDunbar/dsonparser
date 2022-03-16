@@ -41,13 +41,13 @@ else if (type.isEqualsIgnoreCase(“DSON_ARRAY”))
 
 
 To get a specific nested object like the work cell contact there are multiple ways.
-1)  Using find() method (Recommended)
+1)	Using find() method (Recommended)
 
-    Note: the find method in the Dsonparser or the DsonObect or DsonArray classes it returns an object 
-    that can be of type DsonObject or DsonArray or DsonElement use instantceof and casting operator 
-    to change to that specific type to have access to class public functions.
+	Note: the find method in the Dsonparser or the DsonObect or DsonArray classes it returns an object 
+	that can be of type DsonObject or DsonArray or DsonElement use instantceof and casting operator 
+	to change to that specific type to have access to class public functions.
 
-    Object obj=parser.find(“contact.cell.work”);
+    	Object obj=parser.find(“contact.cell.work”);
 
 	obj  will be a DsonElement that is returned
 	to make sure that obj is of type DsonElement use the instanceof 
@@ -56,12 +56,11 @@ To get a specific nested object like the work cell contact there are multiple wa
 	{
 		//Use casting to change the object to type DsonElement
 		DsonElement ele=(DsonElement)obj; 
-    
+
 		//Accessing the value as well can be of primitive data type 
 		// Use casting to change to such data type to work within program.
-    	Object value=ele.getValue();
-    
-    	String field=ele.getField();
+		Object value=ele.getValue();
+		String field=ele.getField();
 		if(value instanceof String)
 		{
 			String number=(String)value;
@@ -69,9 +68,9 @@ To get a specific nested object like the work cell contact there are multiple wa
 		}
 	}
   
-2)	Achieving the above result it can be done as follows but not recommended.  
-    You have to follow the rules of the Dsonparser structure and also follow the 
-    correct nesting of the Json String.
+2)	Achieving the above result it can be done as follows but not recommended.
+	You have to follow the rules of the Dsonparser structure and also follow the
+	correct nesting of the Json String.
 
 	DsonElement ele=parser.getRoot().getObject().getDson(1).getObject().getDson(0).getArray().getDson(0).getObject().getElement(1);	
 

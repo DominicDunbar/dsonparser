@@ -109,7 +109,7 @@ To get a specific nested object like the work cell contact there are multiple wa
 ///////////////////////////////////////////////////////
 
 Example 1:
-Let's say we have a Json String structure like this and you want to find the total salarys
+Let's say we have a Json String structure like this and you want to find the total salaries
 
 String Json_String= "{ "employees":[{"name":"Hanna Jones", "salary": 42845.65}, {"name":"John Smith", "salary": 49845.65}, {"name":"Mary Jane", "salary": 42845.65}] }";
 

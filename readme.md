@@ -1,8 +1,14 @@
 # dsonparser
-What is Dsonparser?
+///////////////////////////////////////
+// 	What is Dsonparser?
+////////////////////////////////////////
+
 Dsonparser is a Json parser for java that converts Json strings into data types that Java programs can use.
 
-Dsonparser Structure
+////////////////////////////////////
+//	Dsonparser Structure
+///////////////////////////////////
+
 DSON => DSON_OBJECT | DSON_ARRAY
 DSON_OBJECT => DSON_LIST | DSON
 DSON_ARRAY => DSON_LIST | DSON
@@ -11,7 +17,10 @@ DSON_ELEMENT => FIELD | VALUE
 FIELD => STRING
 VALUE => OBJECT
 
-DsonWriter Structure
+////////////////////////////////////////
+	DsonWriter Structure
+////////////////////////////////////////
+
 DSON_OBJECT => DSON_ELEMENT(S) | DSON(S)
 DSON_ARRAY => DSON_ELEMENT(S) | DSON(S)
 DSON => DSON_OBECT | DSON_ARRAY
@@ -19,8 +28,11 @@ DSON_ELEMENT=> FIELD | VALUE
 FIELD => STRING
 VALUE => OBJECT
 
-How To Use Dsonparser
-Json_String=”{ “name”: “John”, “age”: 32 , “address”: { “country”: “USA”, “city”: “New Jersey”, “street”: “Barkley”},  
+////////////////////////////////////
+//	How To Use Dsonparser
+///////////////////////////////////
+
+String Json_String=”{ “name”: “John”, “age”: 32 , “address”: { “country”: “USA”, “city”: “New Jersey”, “street”: “Barkley”},  
               “contact”:{“cell”:[ {“personal”:“732-555-4567”,“work”:“732-123-8968”}], 
               “landline”:[{“home”:“732-567-2372”, “office”: “732-899-9010”}]}}”;
               
@@ -39,15 +51,22 @@ else if (type.isEqualsIgnoreCase(“DSON_ARRAY”))
 	DsonArray dsonarr=dson.getArray();
 }
 
+///////////////////////////////////////////////////////////////
+// Searching for the Data in the Dsonpaser Structure
+//////////////////////////////////////////////////////////////
 
 To get a specific nested object like the work cell contact there are multiple ways.
-1)	Using find() method (Recommended)
+
+1)	Using find("seach query string") method (Recommended)
 
 	Note: the find method in the Dsonparser or the DsonObect or DsonArray classes it returns an object 
-	that can be of type DsonObject or DsonArray or DsonElement use instantceof and casting operator 
-	to change to that specific type to have access to class public functions.
+	that can be of type instance of DsonObject or DsonArray or DsonElement use instantceof and casting operator 
+	to change to that specific type will give you access to that class public functions.
+	
+	Also: A seach Query String is the name of the fields separated by a dot ('.') using square backets with a number 
+	provide the index of where to access information in a DsonArray [1].
 
-    	Object obj=parser.find(“contact.cell.work”);
+    	Object obj=parser.find(“contact.cell.[0].work”);
 
 	obj  will be a DsonElement that is returned
 	to make sure that obj is of type DsonElement use the instanceof 
@@ -85,7 +104,64 @@ To get a specific nested object like the work cell contact there are multiple wa
 		}
 	}
 
-What is a DsonWriter? 
+///////////////////////////////////////////////////////
+//	Other functionality of the DsonParser
+///////////////////////////////////////////////////////
+
+Example 1:
+Let's say we have a Json String structure like this and you want to find the total salarys
+
+String Json_String= "{ "employees":[{"name":"Hanna Jones", "salary": 42845.65}, {"name":"John Smith", "salary": 49845.65}, {"name":"Mary Jane", "salary": 42845.65}] }";
+
+DsonParser parser=new DsonParser(Json_String);
+Object obj=parser.get("employees");
+if(obj instanceof DsonArray)
+{
+	DsonArray array=(DsonArray)obj;
+	double total=0;
+	for(int i=0; i<array.getDsonSize(); i++)
+	{
+		DsonObject employee=array.getDson(i).getObject();
+		DsonElement element=employee.find("salary");
+		total+=(double)element.getValue();
+	}
+	system.out.println("Total Salaries: "+total);
+}
+
+.........................................................................................
+
+Example 2:
+Let's say we have a Json String structure like this and you want to output all its elements
+
+String Json_String= "{ "name": "Sam Adams", "age":32, "address": "231 Center ave": "state": "NJ" "city": "Edison"}";
+DsonParser parser=new DsonParser(Json_String);
+DsonObject object=parser.getRoot().getObject();
+if(object != null)
+{
+	for(int i=0; i<object.getElementSize(); i++)
+	{
+		DsonElement ele=object.getElement(i);
+		System.out.println(ele.getField()+":"+ele.getValue());
+	}
+}
+
+//or you can get the list of elements
+DsonList list=object.getList();
+for(int i=0; i<list.getSize(); i++)
+{
+	DsonElement ele=object.getElement(i);
+	// or
+	String field=list.getField(i);
+	Object value=list.getValue(i);
+	
+	System.out.println(ele.getField()+":"+ele.getValue());
+	System.out.println(field+":"+value);
+}
+
+////////////////////////////////////////////////////
+//	What is a DsonWriter? 
+///////////////////////////////////////////////////
+
 A DsonWriter allows the user to take Java primitive data and convert it into a Json String.
 The DsonWriter takes either a DsonObject or DsonArray and return a Json_String that web browsers can understand.
 
